@@ -33,7 +33,7 @@ O projeto inclui `render.yaml` para publicar a API no Render e `vercel.json` par
 4. Volte ao Render e defina `FRONTEND_ORIGIN` com a URL pública da Vercel.
 5. Faça um novo deploy nos dois serviços e teste o login.
 
-O Render usa um disco persistente para a base SQLite da demonstração. Para produção com vários clientes, substitua SQLite por PostgreSQL e mova as fotos para armazenamento de objetos.
+O plano gratuito do Render não usa disco persistente neste projeto. A demonstração funciona, mas a base SQLite e as fotos podem ser perdidas quando o serviço reiniciar ou for publicado novamente. Para produção com vários clientes, substitua SQLite por PostgreSQL e mova as fotos para armazenamento de objetos.
 
 ## API principal
 

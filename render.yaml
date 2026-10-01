@@ -11,7 +11,3 @@ services:
         generateValue: true
       - key: FRONTEND_ORIGIN
         sync: false
-    disk:
-      name: gestao-despesas-data
-      mountPath: /opt/render/project/src/apps/api/data
-      sizeGB: 1

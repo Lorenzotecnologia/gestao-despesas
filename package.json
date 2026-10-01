@@ -1,0 +1,16 @@
+{
+  "name": "gestao-despesas",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace api\" \"npm run dev --workspace web\"",
+    "build": "npm run build --workspace web",
+    "start": "npm run start --workspace api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

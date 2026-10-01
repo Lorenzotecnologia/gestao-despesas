@@ -1,0 +1,8 @@
+node_modules
+apps/**/node_modules
+.DS_Store
+.env
+apps/api/data/*.db
+apps/api/data/*.sqlite
+apps/api/logs
+apps/web/dist

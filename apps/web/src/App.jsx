@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import lorenzoLogo from './assets/lorenzo-logo.svg';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 const SESSION_KEY = 'gestao-despesas-session';
@@ -12,9 +13,9 @@ const initialProjectForm = {
 };
 
 const initialExpenseForm = {
-  projeto_id: '1',
-  categoria_id: '1',
-  forma_pagamento_id: '1',
+  projeto_id: '',
+  categoria_id: '',
+  forma_pagamento_id: '',
   descricao: '',
   fornecedor: '',
   valor: '',
@@ -61,6 +62,7 @@ export default function App() {
   const [lancamentos, setLancamentos] = useState([]);
   const [projetos, setProjetos] = useState([]);
   const [categorias, setCategorias] = useState([]);
+  const [formasPagamento, setFormasPagamento] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [caminhoes, setCaminhoes] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -133,10 +135,11 @@ export default function App() {
     }
 
     try {
-      const [dashRes, projRes, catsRes, usersRes, reportRes, lancRes, fleetRes] = await Promise.all([
+      const [dashRes, projRes, catsRes, paymentRes, usersRes, reportRes, lancRes, fleetRes] = await Promise.all([
         apiFetch(`${API_URL}/dashboard`),
         apiFetch(`${API_URL}/projetos`),
         apiFetch(`${API_URL}/categorias`),
+        apiFetch(`${API_URL}/formas-pagamento`),
         apiFetch(`${API_URL}/usuarios`),
         apiFetch(`${API_URL}/relatorios/executivo`),
         apiFetch(`${API_URL}/lancamentos`),
@@ -146,21 +149,38 @@ export default function App() {
       const dash = await dashRes.json();
       const proj = await projRes.json();
       const cats = await catsRes.json();
+      const payments = await paymentRes.json();
       const users = await usersRes.json();
       const report = await reportRes.json();
       const lanc = await lancRes.json();
       const fleet = await fleetRes.json();
 
       setDashboard(dash);
-      setProjetos(Array.isArray(proj) ? proj : []);
-      setCategorias(Array.isArray(cats) ? cats : []);
+      const projectOptions = Array.isArray(proj) ? proj : [];
+      const categoryOptions = Array.isArray(cats) ? cats : [];
+      const paymentOptions = Array.isArray(payments) ? payments : [];
+      setProjetos(projectOptions);
+      setCategorias(categoryOptions);
+      setFormasPagamento(paymentOptions);
+      setExpenseForm((previous) => ({
+        ...previous,
+        projeto_id: projectOptions.some((item) => String(item.id) === previous.projeto_id)
+          ? previous.projeto_id
+          : String(projectOptions[0]?.id || ''),
+        categoria_id: categoryOptions.some((item) => String(item.id) === previous.categoria_id)
+          ? previous.categoria_id
+          : String(categoryOptions[0]?.id || ''),
+        forma_pagamento_id: paymentOptions.some((item) => String(item.id) === previous.forma_pagamento_id)
+          ? previous.forma_pagamento_id
+          : String(paymentOptions[0]?.id || ''),
+      }));
       setUsuarios(Array.isArray(users) ? users : []);
       setExecutiveReport(report.ok ? report : null);
       setLancamentos(Array.isArray(lanc) ? lanc : []);
       setCaminhoes(Array.isArray(fleet) ? fleet : []);
 
-      if (proj.length && (!selectedProjectId || !proj.some((item) => item.id === selectedProjectId))) {
-        setSelectedProjectId(proj[0].id);
+      if (projectOptions.length && (!selectedProjectId || !projectOptions.some((item) => item.id === selectedProjectId))) {
+        setSelectedProjectId(projectOptions[0].id);
       }
     } catch (error) {
       console.error('Erro ao buscar os dados protegidos:', error);
@@ -483,14 +503,23 @@ export default function App() {
           <h3>Novo lançamento</h3>
           <form onSubmit={handleExpenseSubmit} className="expense-form">
             <select value={expenseForm.projeto_id} onChange={(event) => setExpenseForm({ ...expenseForm, projeto_id: event.target.value })}>
+              <option value="" disabled>Selecione um projeto</option>
               {projetos.map((project) => (
                 <option key={project.id} value={project.id}>{project.nome}</option>
               ))}
             </select>
 
             <select value={expenseForm.categoria_id} onChange={(event) => setExpenseForm({ ...expenseForm, categoria_id: event.target.value })}>
+              <option value="" disabled>Selecione uma categoria</option>
               {categorias.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
+              ))}
+            </select>
+
+            <select value={expenseForm.forma_pagamento_id} onChange={(event) => setExpenseForm({ ...expenseForm, forma_pagamento_id: event.target.value })}>
+              <option value="">Forma de pagamento não informada</option>
+              {formasPagamento.map((forma) => (
+                <option key={forma.id} value={forma.id}>{forma.nome}</option>
               ))}
             </select>
 
@@ -757,7 +786,7 @@ export default function App() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand-box">
-          <h1>Financeiro</h1>
+          <img src={lorenzoLogo} alt="Lorenzo Tecnologia para resultados" />
         </div>
         <nav className="nav-menu">
           {[

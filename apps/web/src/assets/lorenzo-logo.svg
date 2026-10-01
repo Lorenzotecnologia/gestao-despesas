@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 160" role="img" aria-labelledby="title description">
+  <title id="title">Lorenzo Tecnologia para resultados</title>
+  <desc id="description">Marca Lorenzo com símbolo azul e amarelo.</desc>
+  <g fill="none" stroke="#0862ff" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#0862ff" stroke="none" d="M12 29c0-7 3-12 10-16L79 0v83l-67 50z" />
+    <path fill="#dce7ff" stroke="none" d="m12 139 67-56v17h51c3 0 4 3 2 6l-13 21c-6 10-16 16-28 16H37c-12 0-21-4-25-12z" />
+    <path stroke-width="9" d="M88 105V76l37-37M88 105l34-33" />
+  </g>
+  <circle cx="132" cy="34" r="16" fill="#ffbd2e" />
+  <circle cx="122" cy="70" r="13" fill="#0862ff" />
+  <text x="158" y="79" fill="#f8fafc" font-family="Arial, Helvetica, sans-serif" font-size="66" font-weight="800">LORENZO</text>
+  <text x="162" y="119" fill="#b8c6dc" font-family="Arial, Helvetica, sans-serif" font-size="25" letter-spacing="1.4">Tecnologia para resultados</text>
+</svg>

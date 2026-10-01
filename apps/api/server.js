@@ -237,6 +237,15 @@ app.get('/api/categorias', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/formas-pagamento', requireAuth, async (req, res) => {
+  try {
+    const formasPagamento = await all('SELECT * FROM formas_pagamento WHERE ativo = 1 ORDER BY nome ASC');
+    res.json(formasPagamento);
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+});
+
 app.get('/api/usuarios', requireAuth, async (req, res) => {
   try {
     const usuarios = await all(`

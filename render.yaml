@@ -2,6 +2,7 @@ services:
   - type: web
     name: gestao-despesas-api
     runtime: node
+    plan: free
     buildCommand: npm install
     startCommand: node apps/api/server.js
     envVars:
